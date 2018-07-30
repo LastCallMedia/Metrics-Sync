@@ -50,11 +50,11 @@ export default class AcquiaSync implements Sync {
         const response = await this.client.getMetrics(envId, Object.keys(metrics), from.toISOString(), to.toISOString());
         const data = mapMetrics(response, metrics);
 
-        return data.reduce(function(collected: Array<Object>, hourlyData) {
-            collected.push({index: {_id: `${envId}/${hourlyData.timestamp}`}})
-            collected.push(hourlyData)
-            return collected
-        }, [])
+        return data.map(function(hour) {
+            return Object.assign({}, hour, {
+                _id: `${envId}/${hour.timestamp}`
+            })
+        })
     }
 }
 
@@ -73,6 +73,7 @@ function mapMetrics(response, metricInfo) {
     const grouped = response.reduce(function(collected, group) {
         const metricName = group.metric;
 
+        
         const points = group.datapoints.reduce(function(collected, point) {
             const timestamp = moment.unix(point[1]).startOf('hour').toISOString();
             if (!collected.has(timestamp)) {

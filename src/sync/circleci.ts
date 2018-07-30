@@ -1,6 +1,7 @@
 
 import Client from '../client/circleci'
 import Sync from './sync'
+import {omit} from 'lodash'
 
 export type CircleCISyncConfig = {
     apiKey: string
@@ -42,13 +43,10 @@ export default class CircleCiSync implements Sync {
     async getData() {
         const builds = await this.client.getProjectBuildsPaged(this.vcsType, this.owner, this.repo, 250);
 
-        return builds.reduce((collected, build) => {
-            // ES Bulk API action description/metadata.
-            collected.push({index: {_id: `${build.vcs_type}/${build.username}/${build.reponame}/${build.build_num}`}})
-            // Remove the circle config.  It's just noise.
-            delete build.circle_yml.string
-            collected.push(build);
-            return collected
-        }, [])
+        return builds.map(function(build) {
+            return Object.assign({}, omit(build, 'circle_yml'), {
+                _id: `${build.vcs_type}/${build.username}/${build.reponame}/${build.build_num}`,
+            })
+        })
     }
 }

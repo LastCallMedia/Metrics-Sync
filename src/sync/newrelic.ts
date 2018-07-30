@@ -34,11 +34,11 @@ export default class NewRelicSync implements Sync {
         const response = await this.client.getMetrics(this.appId, ['HttpDispatcher'], from.toISOString(), to.toISOString(), 3600);
         const timeslices = mapTimeslices(response.metric_data.metrics[0].timeslices);
 
-        return timeslices.reduce(function(collected, timeslice) {
-            collected.push({index: {_id: `${appId}/${timeslice.from}/${timeslice.to}`}})
-            collected.push(timeslice)
-            return collected
-        }, [])
+        return timeslices.map(function(timeslice) {
+           return Object.assign({}, timeslice, {
+             _id: `${appId}/${timeslice.from}/${timeslice.to}`
+           })
+        });
     }
 }
 
