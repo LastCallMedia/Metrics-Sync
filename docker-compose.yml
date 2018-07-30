@@ -1,0 +1,23 @@
+# This Docker Compose application is for testing purposes only.
+#
+# This is not a suitable way to run elasticsearch in production.
+version: '3.2'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+    container_name: elasticsearch
+    ports: ['9200:9200']
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.3.0
+    container_name: kibana
+    depends_on: [elasticsearch]
+    ports: ['5601:5601']
+
+  sync:
+    build: .
+    volumes:
+      - ./sync.yml:/app/sync.yml
+
+

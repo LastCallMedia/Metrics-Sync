@@ -1,0 +1,25 @@
+# Elasticsearch Client information.
+#
+# For more info on the structure of this object,
+# @see https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/configuration.html
+elasticsearch:
+  host: elasticsearch:9200
+
+# An array of sources to ingest metrics from. You may specify the same type
+# of source multiple times if you wish.
+sources:
+  - type: newrelic
+    config:
+      apiKey: foo
+      appId: bar
+  - type: acquia
+    config:
+      public_key: foo
+      private_key: bar
+      environmentId: baz
+  - type: circleci
+    config:
+      apiKey: foo
+      vcsType: github
+      owner: bar
+      repo: baz

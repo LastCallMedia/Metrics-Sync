@@ -1,0 +1,5 @@
+.circleci
+Dockerfile
+docker-compose.yml
+tsconfig.json
+sync.yml
