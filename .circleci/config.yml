@@ -20,6 +20,7 @@ jobs:
           paths: .
 
   release:
+    working_directory: /app
     docker:
       - image: node:8
     steps:
