@@ -34,7 +34,7 @@ jobs:
           command: npm version --no-git-tag-version $CIRCLE_TAG
       - run:
           name: Publish package
-          command: npm publish --scope=public
+          command: npm publish --access=public
 
 workflows:
   version: 2
