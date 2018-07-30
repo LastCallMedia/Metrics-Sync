@@ -13,6 +13,11 @@ Running
 
 To invoke a sync, run `bin/metricsync`.  The tool will go out and fetch the latest metrics, and push them into Elasticsearch.  It doesn't particularly matter how often you run the sync - all sources generate an ID that will prevent the records from being duplicated in Elasticsearch.
 
+Alternatively, you can run this application with Docker:
+```bash
+docker run -v ./sync.yml:/app/sync.yml lastcallmedia/metrics-sync 
+```
+
 Sources
 --------
 
