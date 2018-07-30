@@ -27,13 +27,13 @@ jobs:
           at: /app
       - run:
           name: Authenticate to NPM
-          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
-      - run:
-          name: Bump version
-          command: npm version --no-git-tag-version $CIRCLE_TAG
-      - run:
-          name: Publish package
-          command: npm publish
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_TOKEN" > ~/.npmrc
+#      - run:
+#          name: Bump version
+#          command: npm version --no-git-tag-version $CIRCLE_TAG
+#      - run:
+#          name: Publish package
+#          command: npm publish
 
 workflows:
   version: 2
