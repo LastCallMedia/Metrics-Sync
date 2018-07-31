@@ -35,10 +35,10 @@ export default class CircleCiSync implements Sync {
         this.repo = config.repo
     }
     getIndex() {
-        return 'circleci';
+        return 'circleci-YYYY-MM-DD';
     }
     getType() {
-        return 'build'
+        return 'circle_build'
     }
     async getData() {
         const builds = await this.client.getProjectBuildsPaged(this.vcsType, this.owner, this.repo, 250);
@@ -46,6 +46,7 @@ export default class CircleCiSync implements Sync {
         return builds.map(function(build) {
             return Object.assign({}, omit(build, 'circle_yml'), {
                 _id: `${build.vcs_type}/${build.username}/${build.reponame}/${build.build_num}`,
+                '@timestamp': build.start_time
             })
         })
     }

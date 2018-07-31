@@ -7,4 +7,5 @@ export default interface Sync {
 
 export type RecordWithId = {
     _id: string
+    '@timestamp': string
 }

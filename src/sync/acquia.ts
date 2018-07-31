@@ -30,10 +30,10 @@ export default class AcquiaSync implements Sync {
         this.environmentId = config.environmentId;
     }
     getIndex() {
-        return 'acquia';
+        return 'acquia-YYYY-MM-DD';
     }
     getType() {
-        return 'hourly_metric'
+        return 'acquia_stackmetric'
     }
     async getData() {
         const envId = this.environmentId
@@ -53,7 +53,8 @@ export default class AcquiaSync implements Sync {
 
         return data.map(function(hour) {
             return Object.assign({}, hour, {
-                _id: `${envId}/${hour.timestamp}`
+                _id: `${envId}/${hour.from}`,
+                '@timestamp': hour.from
             })
         })
     }
@@ -92,7 +93,8 @@ function mapMetrics(response, metricInfo) {
     return Object.keys(tree).map(function(hour) {
         return Object.assign({}, tree[hour], {
           from: hour,
-          to: moment(hour).endOf('hour')
+          to: moment(hour).endOf('hour'),
+          environmentId: this.environmentId
         })
     })
 }

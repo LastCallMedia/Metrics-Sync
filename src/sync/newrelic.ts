@@ -22,10 +22,10 @@ export default class NewRelicSync implements Sync {
         this.appId = config.appId;
     }
     getIndex() {
-        return 'newrelic';
+        return 'newrelic-YYYY-MM-DD';
     }
     getType() {
-        return 'hourly_metric'
+        return 'newrelic_metric'
     }
     async getData() {
         const appId = this.appId;
@@ -36,7 +36,8 @@ export default class NewRelicSync implements Sync {
 
         return timeslices.map(function(timeslice) {
            return Object.assign({}, timeslice, {
-             _id: `${appId}/${timeslice.from}/${timeslice.to}`
+             _id: `${appId}/${timeslice.from}/${timeslice.to}`,
+             '@timestamp': timeslice.from
            })
         });
     }
@@ -48,6 +49,7 @@ function mapTimeslices(timeslices) {
         return Object.assign({}, timeslice.values, {
             from: timeslice.from,
             to: timeslice.to,
+            appId: this.appId
         });
     });
 }
