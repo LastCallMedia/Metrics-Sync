@@ -3,6 +3,7 @@ import Client from '../client/acquia'
 import * as moment from 'moment'
 import {sum, average} from "../util"
 import Sync from './sync'
+import {groupBy, defaultsDeep, set} from 'lodash'
 
 export type AcquiaSyncConfig = {
     public_key: string
@@ -58,74 +59,40 @@ export default class AcquiaSync implements Sync {
     }
 }
 
-type ProcessedHour = {
-    timestamp: string,
-}
-
 /**
- * Take an array of metrics broken down by arbitrary timestamps and sum/average them
- * into an array of hourly metrics.
+ * Turn an array of discrete metrics into an array of hourly datapoints.
  *
  * @param response
  */
 function mapMetrics(response, metricInfo) {
     // Collect each metric into a single map grouped by hour.
-    const grouped = response.reduce(function(collected, group) {
+    const tree = response.reduce(function(collected, group) {
         const metricName = group.metric;
 
-        
-        const points = group.datapoints.reduce(function(collected, point) {
-            const timestamp = moment.unix(point[1]).startOf('hour').toISOString();
-            if (!collected.has(timestamp)) {
-                collected.set(timestamp, [])
-            }
-            collected.get(timestamp).push(point[0])
-            return collected
-        }, new Map())
+        // Group all datapoints for the particular metric by hour. After this,
+        // we have an object where the properties are the hours, and each hour
+        // has an array of datapoints, consisting of [value, timestamp].
+        const points = groupBy(group.datapoints, function(point) {
+            return moment.unix(point[1]).startOf('hour').toISOString();
+        })
 
-        // Aggregate each hour into a single data point.
-        collected.set(metricName, aggregate(points, metricInfo[metricName]))
-
+        // Loop through each hour and aggregate the points. Merge them into the
+        // collected data.  After this, collected will be an object where the
+        // hours are the top level properties, and each metric is a property on
+        // the hour.
+        Object.keys(points).forEach(function(hour) {
+            let hourPoints = points[hour].map(value => value[0]);
+            set(collected, [hour, metricName], metricInfo[metricName](hourPoints));
+        })
         return collected
-    }, new Map())
+    }, {})
 
-
-    return join(grouped);
-}
-
-/**
- * Invoke an aggregator function for each set of entries in a map.
- *
- * @param metricMap
- * @param aggregator
- * @return {Map<string, int>}
- */
-function aggregate(metricMap, aggregator) {
-    const ret = new Map()
-    for (let [key, values] of metricMap.entries()) {
-        ret.set(key, aggregator(values))
-    }
-    return ret;
-}
-
-/**
- * Join a map of maps into an array of objects, with each item representing a single hour.
- *
- * @param groupedMetrics
- * @return {any[]}
- */
-function join(groupedMetrics): Array<ProcessedHour> {
-    const ret = {};
-    for (let [metricName, metricValues] of groupedMetrics.entries()) {
-        let hour, value
-        for(let [hour, value] of metricValues) {
-            if(!ret[hour]) {
-                ret[hour] = {
-                    timestamp: hour
-                }
-            }
-            ret[hour][metricName] = value
-        }
-    }
-    return Object.values(ret)
+    // Deconstruct the tree to turn it into an array containing datapoints
+    // with an additional from and to property.
+    return Object.keys(tree).map(function(hour) {
+        return Object.assign({}, tree[hour], {
+          from: hour,
+          to: moment(hour).endOf('hour')
+        })
+    })
 }
