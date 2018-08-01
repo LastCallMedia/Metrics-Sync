@@ -3,10 +3,10 @@ import {AcquiaSourceConfig} from '../config'
 import Client from '../client/acquia'
 import * as moment from 'moment'
 import {sum, average} from "../util"
-import Sync from './sync'
+import Source from './source'
 import {groupBy, defaultsDeep, set} from 'lodash'
 
-export default class AcquiaSync implements Sync {
+export default class AcquiaSync implements Source {
     client: Client
     environmentId: string
 

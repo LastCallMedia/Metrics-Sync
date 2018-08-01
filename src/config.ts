@@ -7,15 +7,21 @@
 export type SourceConfig = AcquiaSourceConfig | CircleCiSourceConfig | NewRelicSourceConfig;
 
 export interface Configuration {
-  elasticsearch: ElasticSearchConnection;
+  /**
+   * Elasticsearch connection details
+   */
+  elasticsearch: {
+    host?: string;
+    [k: string]: any;
+  };
+  /**
+   * Source plugins
+   */
   sources: SourceConfig[];
 }
 /**
- * The Elasticsearch connection information
+ * Configuration for the Acquia source
  */
-export interface ElasticSearchConnection {
-  [k: string]: any;
-}
 export interface AcquiaSourceConfig {
   type: "acquia";
   /**
@@ -31,6 +37,9 @@ export interface AcquiaSourceConfig {
    */
   environmentId: string;
 }
+/**
+ * Configuration for the CircleCI source
+ */
 export interface CircleCiSourceConfig {
   type: "circleci";
   /**
@@ -50,6 +59,9 @@ export interface CircleCiSourceConfig {
    */
   repo: string;
 }
+/**
+ * Configuration for the New Relic source
+ */
 export interface NewRelicSourceConfig {
   type: "newrelic";
   /**

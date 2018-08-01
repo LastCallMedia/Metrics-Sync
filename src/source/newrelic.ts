@@ -2,9 +2,9 @@
 import {NewRelicSourceConfig} from '../config'
 import Client from '../client/newrelic'
 import * as moment from 'moment';
-import Sync from './sync'
+import Source from './source'
 
-export default class NewRelicSync implements Sync {
+export default class NewRelicSync implements Source {
     client: Client
     appId: number
     constructor(config: NewRelicSourceConfig) {

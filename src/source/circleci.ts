@@ -1,10 +1,10 @@
 
 import {CircleCiSourceConfig} from '../config'
 import Client from '../client/circleci'
-import Sync from './sync'
+import Source from './source'
 import {omit} from 'lodash'
 
-export default class CircleCiSync implements Sync {
+export default class CircleCiSync implements Source {
     client: Client
     vcsType: string
     owner: string

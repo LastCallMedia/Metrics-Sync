@@ -2,9 +2,9 @@ import {SourceConfig} from '../config'
 import Acquia from "./acquia";
 import NewRelic from "./newrelic";
 import CircleCI from "./circleci";
-import Sync from './sync'
+import Source from './source'
 
-export default function factory(source: SourceConfig): Sync {
+export default function factory(source: SourceConfig): Source {
     switch(source.type) {
         case 'acquia':
             return new Acquia(source)

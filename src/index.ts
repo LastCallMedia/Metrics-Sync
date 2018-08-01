@@ -1,7 +1,7 @@
 
 import {Configuration} from "./config";
 import {Client} from 'elasticsearch'
-import factory from './sync/factory';
+import factory from './source/factory';
 import * as Promise from 'bluebird'
 import {omit} from 'lodash'
 import * as moment from 'moment'
@@ -12,7 +12,7 @@ export default async function(config: Configuration) {
     // remote APIs.
     await es.ping();
 
-    const result = Promise.map(config.sources, async function(sourceConfig) {
+    return Promise.map(config.sources, async function(sourceConfig) {
         const source = factory(sourceConfig)
         const data = await source.getData()
         const indexName = function(record) {
@@ -37,7 +37,5 @@ export default async function(config: Configuration) {
         })
 
     }, {concurrency: 2});
-
-    return result
 }
 

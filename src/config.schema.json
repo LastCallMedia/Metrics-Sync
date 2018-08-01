@@ -5,6 +5,7 @@
       "type": "object"
     },
     "AcquiaSourceConfig": {
+      "description": "Configuration for the Acquia source",
       "type": "object",
       "properties": {
         "type": {
@@ -27,6 +28,7 @@
       "additionalProperties": false
     },
     "CircleCISourceConfig": {
+      "description": "Configuration for the CircleCI source",
       "type": "object",
       "properties": {
         "type": {
@@ -53,6 +55,7 @@
       "additionalProperties": false
     },
     "NewRelicSourceConfig": {
+      "description": "Configuration for the New Relic source",
       "type": "object",
       "properties": {
         "type": {
@@ -83,9 +86,16 @@
   "type": "object",
   "properties": {
     "elasticsearch": {
-      "$ref": "#/definitions/ElasticSearchConnection"
+      "description": "Elasticsearch connection details",
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string"
+        }
+      }
     },
     "sources": {
+      "description": "Source plugins",
       "type": "array",
       "items": {
         "$ref": "#/definitions/SourceConfig"

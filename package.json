@@ -25,7 +25,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "update-schema": "json2ts src/config.schema.json > src/config.ts"
+    "schema": "json2ts src/config.schema.json > src/config.ts"
   },
   "bin": "bin/metricsync"
 }
