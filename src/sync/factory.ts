@@ -1,32 +1,18 @@
-import Acquia, {AcquiaSyncConfig} from "./acquia";
-import NewRelic, {NewRelicSyncConfig} from "./newrelic";
-import CircleCI, {CircleCISyncConfig} from "./circleci";
+import {SourceConfig} from '../config'
+import Acquia from "./acquia";
+import NewRelic from "./newrelic";
+import CircleCI from "./circleci";
 import Sync from './sync'
 
-export default function factory(sync: SyncSpec): Sync {
-    switch(sync.type) {
+export default function factory(source: SourceConfig): Sync {
+    switch(source.type) {
         case 'acquia':
-            return new Acquia(sync.config)
+            return new Acquia(source)
         case 'newrelic':
-            return new NewRelic(sync.config)
+            return new NewRelic(source)
         case 'circleci':
-            return new CircleCI(sync.config)
+            return new CircleCI(source)
         default:
             throw new Error('Unknown sync type');
     }
 }
-
-type AcquiaSyncSpec = {
-    type: 'acquia'
-    config: AcquiaSyncConfig
-}
-type NewRelicSyncSpec = {
-    type: 'newrelic'
-    config: NewRelicSyncConfig
-}
-type CircleCISyncSpec = {
-    type: 'circleci'
-    config: CircleCISyncConfig
-}
-
-export type SyncSpec = AcquiaSyncSpec | NewRelicSyncSpec | CircleCISyncSpec

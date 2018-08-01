@@ -12,7 +12,7 @@ export default class NewRelicClient {
 
         return this.send(request);
     }
-    getMetrics(appId: string, names: Array<string>, from: string, to: string, period: number) {
+    getMetrics(appId: number, names: Array<string>, from: string, to: string, period: number) {
         const url = new URL(`https://api.newrelic.com/v2/applications/${appId}/metrics/data.json`);
         const params = new URLSearchParams({
             from,

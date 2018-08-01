@@ -1,14 +1,8 @@
 
+import {CircleCiSourceConfig} from '../config'
 import Client from '../client/circleci'
 import Sync from './sync'
 import {omit} from 'lodash'
-
-export type CircleCISyncConfig = {
-    apiKey: string
-    vcsType: string
-    owner: string
-    repo: string
-}
 
 export default class CircleCiSync implements Sync {
     client: Client
@@ -16,7 +10,7 @@ export default class CircleCiSync implements Sync {
     owner: string
     repo: string
 
-    constructor(config: CircleCISyncConfig) {
+    constructor(config: CircleCiSourceConfig) {
         if(!config.apiKey) {
             throw new Error('Missing apiToken')
         }

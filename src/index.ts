@@ -1,14 +1,18 @@
 
+import {Configuration} from "./config";
 import {Client} from 'elasticsearch'
-import factory, {SyncSpec} from './sync/factory';
+import factory from './sync/factory';
 import * as Promise from 'bluebird'
 import {omit} from 'lodash'
 import * as moment from 'moment'
 
-export default function(elasticsearch: object, sources: Array<SyncSpec>) {
-    const es = new Client(elasticsearch)
+export default async function(config: Configuration) {
+    const es = new Client(config.elasticsearch)
+    // Require elasticsearch to be responsive before querying any
+    // remote APIs.
+    await es.ping();
 
-    const result = Promise.map(sources, async function(sourceConfig) {
+    const result = Promise.map(config.sources, async function(sourceConfig) {
         const source = factory(sourceConfig)
         const data = await source.getData()
         const indexName = function(record) {

@@ -1,21 +1,16 @@
 
+import {AcquiaSourceConfig} from '../config'
 import Client from '../client/acquia'
 import * as moment from 'moment'
 import {sum, average} from "../util"
 import Sync from './sync'
 import {groupBy, defaultsDeep, set} from 'lodash'
 
-export type AcquiaSyncConfig = {
-    public_key: string
-    private_key: string
-    environmentId: string
-}
-
 export default class AcquiaSync implements Sync {
     client: Client
     environmentId: string
 
-    constructor(config: AcquiaSyncConfig) {
+    constructor(config: AcquiaSourceConfig) {
         if(!config.public_key) {
             throw new Error('Missing public_key')
         }

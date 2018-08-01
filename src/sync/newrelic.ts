@@ -1,17 +1,13 @@
 
+import {NewRelicSourceConfig} from '../config'
 import Client from '../client/newrelic'
 import * as moment from 'moment';
 import Sync from './sync'
 
-export type NewRelicSyncConfig = {
-    apiKey: string
-    appId: string
-}
-
 export default class NewRelicSync implements Sync {
     client: Client
-    appId: string
-    constructor(config: NewRelicSyncConfig) {
+    appId: number
+    constructor(config: NewRelicSourceConfig) {
         if(!config.apiKey) {
             throw new Error('Missing apiKey')
         }
@@ -31,13 +27,14 @@ export default class NewRelicSync implements Sync {
         const appId = this.appId;
         const to = moment().startOf('hour');
         const from = moment().subtract(1, 'day');
-        const response = await this.client.getMetrics(this.appId, ['HttpDispatcher'], from.toISOString(), to.toISOString(), 3600);
+        const response = await this.client.getMetrics(appId, ['HttpDispatcher'], from.toISOString(), to.toISOString(), 3600);
         const timeslices = mapTimeslices(response.metric_data.metrics[0].timeslices);
 
         return timeslices.map(function(timeslice) {
            return Object.assign({}, timeslice, {
              _id: `${appId}/${timeslice.from}/${timeslice.to}`,
-             '@timestamp': timeslice.from
+             '@timestamp': timeslice.from,
+             appId: appId
            })
         });
     }
@@ -48,8 +45,7 @@ function mapTimeslices(timeslices) {
         // Flatten the timeslice.
         return Object.assign({}, timeslice.values, {
             from: timeslice.from,
-            to: timeslice.to,
-            appId: this.appId
+            to: timeslice.to
         });
     });
 }

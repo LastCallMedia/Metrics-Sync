@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "ajv": "^6.5.2",
     "bluebird": "^3.5.1",
     "crypto-js": "^3.1.9-1",
     "edgegrid": "^3.0.4",
@@ -18,11 +19,13 @@
     "@types/node": "^10.5.4",
     "@types/node-fetch": "^2.1.2",
     "@types/yargs": "^11.1.1",
+    "json-schema-to-typescript": "^5.5.0",
     "ts-node": "^7.0.0",
     "typescript": "^2.9.2"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "update-schema": "json2ts src/config.schema.json > src/config.ts"
   },
   "bin": "bin/metricsync"
 }

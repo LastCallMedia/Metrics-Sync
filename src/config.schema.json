@@ -1,0 +1,97 @@
+{
+  "definitions": {
+    "ElasticSearchConnection": {
+      "description": "The Elasticsearch connection information",
+      "type": "object"
+    },
+    "AcquiaSourceConfig": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": ["acquia"]
+        },
+        "public_key": {
+          "description": "The public key associated with your Acquia account",
+          "type": "string"
+        },
+        "private_key": {
+          "description": "The public key associated with your Acquia account",
+          "type": "string"
+        },
+        "environmentId": {
+          "description": "The UUID of the environment you want metrics from",
+          "type": "string"
+        }
+      },
+      "required": ["type", "public_key", "private_key", "environmentId"],
+      "additionalProperties": false
+    },
+    "CircleCISourceConfig": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": ["circleci"]
+        },
+        "apiKey": {
+          "description": "The API key associated with your CircleCI account",
+          "type": "string"
+        },
+        "vcsType": {
+          "description": "The VCS type of the source repository (eg: github)",
+          "type": "string"
+        },
+        "owner": {
+          "description": "The owner or organization that owns the repository",
+          "type": "string"
+        },
+        "repo": {
+          "description": "The repo slug",
+          "type": "string"
+        }
+      },
+      "required": ["type", "apiKey", "vcsType", "owner", "repo"],
+      "additionalProperties": false
+    },
+    "NewRelicSourceConfig": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": ["newrelic"]
+        },
+        "apiKey": {
+          "description": "The API key associated with your New Relic account",
+          "type": "string"
+        },
+        "appId": {
+          "description": "The numeric app ID associated with the environment you want data from",
+          "type": "number"
+        }
+      },
+      "required": ["type", "apiKey", "appId"],
+      "additionalProperties": false
+    },
+    "SourceConfig": {
+      "type": "object",
+      "anyOf": [
+        {"$ref": "#/definitions/AcquiaSourceConfig"},
+        {"$ref": "#/definitions/CircleCISourceConfig"},
+        {"$ref": "#/definitions/NewRelicSourceConfig"}
+      ]
+    }
+  },
+  "title": "Configuration",
+  "type": "object",
+  "properties": {
+    "elasticsearch": {
+      "$ref": "#/definitions/ElasticSearchConnection"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/SourceConfig"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": ["elasticsearch", "sources"]
+}

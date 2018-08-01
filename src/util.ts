@@ -6,3 +6,4 @@ export function sum(values: Array<number>): number {
 export function average(values: Array<number>): number {
     return sum(values) / values.length
 }
+
