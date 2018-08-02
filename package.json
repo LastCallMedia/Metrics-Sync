@@ -24,7 +24,7 @@
     "typescript": "^2.9.2"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp src/config.schema.json dist/config.schema.json",
     "schema": "json2ts src/config.schema.json > src/config.ts"
   },
   "bin": "bin/metricsync"
