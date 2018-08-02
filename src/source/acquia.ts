@@ -11,16 +11,6 @@ export default class AcquiaSync implements Source {
     environmentId: string
 
     constructor(config: AcquiaSourceConfig) {
-        if(!config.public_key) {
-            throw new Error('Missing public_key')
-        }
-        if(!config.private_key) {
-            throw new Error('Missing private_key')
-        }
-
-        if(!config.environmentId) {
-            throw new Error('Missing environmentId');
-        }
         this.client = new Client(config.public_key, config.private_key);
         this.environmentId = config.environmentId;
     }
@@ -44,7 +34,7 @@ export default class AcquiaSync implements Source {
         const to = moment().startOf('hour');
         const from = to.clone().subtract(1, 'day');
         const response = await this.client.getMetrics(envId, Object.keys(metrics), from.toISOString(), to.toISOString());
-        const data = mapMetrics(response, metrics);
+        const data = mapMetrics(response, metrics, this.environmentId);
 
         return data.map(function(hour) {
             return Object.assign({}, hour, {
@@ -60,7 +50,7 @@ export default class AcquiaSync implements Source {
  *
  * @param response
  */
-function mapMetrics(response, metricInfo) {
+function mapMetrics(response, metricInfo, environmentId) {
     // Collect each metric into a single map grouped by hour.
     const tree = response.reduce(function(collected, group) {
         const metricName = group.metric;
@@ -89,7 +79,7 @@ function mapMetrics(response, metricInfo) {
         return Object.assign({}, tree[hour], {
           from: hour,
           to: moment(hour).endOf('hour'),
-          environmentId: this.environmentId
+          environmentId: environmentId
         })
     })
 }
