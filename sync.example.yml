@@ -1,6 +1,6 @@
-# Elasticsearch Client information.
+# Elasticsearch host information.
 #
-# For more info on the structure of this object,
+# Can be a simple string indicating hostname/port, or an object.
 # @see https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/configuration.html
 elasticsearch:
   host: elasticsearch:9200
@@ -9,17 +9,14 @@ elasticsearch:
 # of source multiple times if you wish.
 sources:
   - type: newrelic
-    config:
-      apiKey: foo
-      appId: bar
+    apiKey: YOUR_NEW_RELIC_APIKEY
+    appId: YOUR_NEW_RELIC_APP_ID
   - type: acquia
-    config:
-      public_key: foo
-      private_key: bar
-      environmentId: baz
+    public_key: YOUR_ACQUIA_PUBLIC_API_KEY
+    private_key: YOUR_ACQUIA_PRIVATE_API_KEY
+    environmentId: UUID_OF_ACQUIA_ENV
   - type: circleci
-    config:
-      apiKey: foo
-      vcsType: github
-      owner: bar
-      repo: baz
+    apiKey: YOUR_API_KEY
+    vcsType: github
+    owner: YOUR_GITHUB_ORG
+    repo: YOUR_GITHUB_REPO
