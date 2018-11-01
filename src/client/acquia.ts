@@ -23,7 +23,12 @@ export default class AcquiaClient {
                 'Accept': 'application/json'
             }
         });
-        return this.fetch(request).then(response => response.json()).then(data => data._embedded.items);
+        return this.fetch(request).then(response => response.json()).then(data => {
+            if(data.hasOwnProperty('error')) {
+                throw new Error(`Acquia metrics sync failed with error: ${data.message}`);
+            }
+            return data._embedded.items
+        });
     }
     async fetch(request: Request) {
         const signed = this.signer.signFetchRequest(request);
