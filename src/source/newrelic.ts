@@ -33,26 +33,23 @@ export default class NewRelicSync implements Source {
         const response = await this.client.getMetrics(appId, names, from.toISOString(), to.toISOString(), 3600);
         const metrics = response.metric_data.metrics;
 
-        return [].concat(...metrics.map(function(metric) {
-            const timeslices = mapTimeslices(metric.timeslices);
-            return timeslices.map(function(timeslice) {
-                return Object.assign({}, timeslice, {
-                    _id: `${appId}/${metric.name}/${timeslice.from}/${timeslice.to}`,
-                    metricname: metric.name,
-                    '@timestamp': timeslice.from,
-                    appId: appId
-                })
-            });
-        }));
-    }
-}
+        // Metrics is an array of metric objects. Each metric object contains an array of timeslices
+        // that are consistent across all metrics.  Convert to an array of timeslices, where each
+        // timeslice is an object that has a key for each metric.
+        const slices = metrics.reduce(function(collected, metric, idx) {
+            metric.timeslices.forEach((slice, i) => {
+                if(!collected[i]) collected[i] = {from: slice.from, to: slice.to}
+                collected[i][metric.name] = slice.values
+            })
+            return collected
+        }, [])
 
-function mapTimeslices(timeslices) {
-    return timeslices.map(function(timeslice) {
-        // Flatten the timeslice.
-        return Object.assign({}, timeslice.values, {
-            from: timeslice.from,
-            to: timeslice.to
-        });
-    });
+        return slices.map(function(slice) {
+            return Object.assign({}, slice, {
+                _id: `${appId}/${slice.from}/${slice.to}`,
+                '@timestamp': slice.from,
+                appId: appId
+            })
+        })
+    }
 }
