@@ -68,6 +68,10 @@
         "appId": {
           "description": "The numeric app ID associated with the environment you want data from",
           "type": "number"
+        },
+        "names": {
+          "description": "Metric names from New Relic API",
+          "type": "array"
         }
       },
       "required": ["type", "apiKey", "appId"],

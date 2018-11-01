@@ -11,6 +11,9 @@ sources:
   - type: newrelic
     apiKey: YOUR_NEW_RELIC_APIKEY
     appId: YOUR_NEW_RELIC_APP_ID
+    names:
+      - 'HttpDispatcher'
+      - 'Apdex'
   - type: acquia
     public_key: YOUR_ACQUIA_PUBLIC_API_KEY
     private_key: YOUR_ACQUIA_PRIVATE_API_KEY

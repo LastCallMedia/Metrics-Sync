@@ -19,7 +19,7 @@ export default class NewRelicClient {
             to,
             period: period.toString()
         });
-        names.forEach(name => params.append('names', name))
+        names.forEach(name => params.append('names[]', name))
         url.search = params.toString();
         return this.send(url);
     }
