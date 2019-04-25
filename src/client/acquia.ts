@@ -1,7 +1,8 @@
 
 import { URL, URLSearchParams } from 'url'
 import * as CryptoJS from 'crypto-js'
-import fetch, {Request} from 'node-fetch'
+import {Request} from 'node-fetch'
+import fetch from '../fetch-retry'
 
 export default class AcquiaClient {
     signer: Signer
@@ -23,16 +24,22 @@ export default class AcquiaClient {
                 'Accept': 'application/json'
             }
         });
-        return this.fetch(request).then(response => response.json()).then(data => {
-            if(data.hasOwnProperty('error')) {
-                throw new Error(`Acquia metrics sync failed with error: ${data.message}`);
-            }
-            return data._embedded.items
-        });
+        return this.fetch(request).then(data => data._embedded.items);
     }
     async fetch(request: Request) {
         const signed = this.signer.signFetchRequest(request);
-        return fetch(signed);
+        return fetch(signed)
+            .then(response => response.json())
+            .then(response => {
+                if(response.hasOwnProperty('error')) {
+                    throw new Error(response.message);
+                }
+                return response
+            })
+            .catch(err => {
+                const message = err instanceof Error ? err.message : err
+                return Promise.reject(new Error(`Acquia Client: ${message}`))
+            })
     }
 }
 
