@@ -1,6 +1,7 @@
 
 import { URL, URLSearchParams } from 'url'
-import fetch, {Request} from 'node-fetch'
+import fetch from '../fetch-retry'
+import {Request} from 'node-fetch'
 
 function handleResponse(response) {
     if (response.ok) {
@@ -37,7 +38,12 @@ export default class CircleCIClient {
             headers: {
                 accept: 'application/json'
             }
-        })).then(handleResponse);
+        })).then(handleResponse)
+            .catch(err => {
+                let message = err instanceof Error ? err.message : err
+                message = message.replace(this.apiKey, 'XXX');
+                return Promise.reject(new Error(`CircleCI Client: ${message}`))
+            })
     }
     async getProjectBuildsPaged(vcsType: string, username: string, project: string, limit: number, filter?: string) {
         let offset = 0;
@@ -53,5 +59,20 @@ export default class CircleCIClient {
             }
         }
         return allResults;
+    }
+}
+
+class CircleCIError extends Error {
+    constructor(previous,) {
+        super('')
+        let message = '';
+        if(previous instanceof Error) {
+            message = previous.message;
+            this.stack = previous.stack;
+        }
+        else {
+            message = previous
+        }
+        this.message = `CircleCI Error: ${message.toString()}`
     }
 }
