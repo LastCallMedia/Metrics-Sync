@@ -1,7 +1,7 @@
 # Elasticsearch host information.
 #
 # Can be a simple string indicating hostname/port, or an object.
-# @see https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/configuration.html
+# @see https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/7.x/client-configuration.html
 elasticsearch:
   host: elasticsearch:9200
 
