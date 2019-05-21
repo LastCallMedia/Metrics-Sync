@@ -11,7 +11,6 @@ export interface Configuration {
    * Elasticsearch connection details
    */
   elasticsearch: {
-    host?: string;
     [k: string]: any;
   };
   /**
