@@ -22,7 +22,6 @@ export default async function(config: Configuration) {
         }
 
         return es.bulk({
-            type: source.getType(),
             body: data.reduce(function(records, point) {
                 if(!point._id) {
                     throw new Error(`Received record without id while processing ${source.getType()}`)
