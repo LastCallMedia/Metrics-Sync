@@ -91,12 +91,7 @@
   "properties": {
     "elasticsearch": {
       "description": "Elasticsearch connection details",
-      "type": "object",
-      "properties": {
-        "host": {
-          "type": "string"
-        }
-      }
+      "$ref": "#/definitions/ElasticSearchConnection"
     },
     "sources": {
       "description": "Source plugins",
