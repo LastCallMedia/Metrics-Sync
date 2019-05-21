@@ -11,7 +11,6 @@ export interface Configuration {
    * Elasticsearch connection details
    */
   elasticsearch: {
-    host?: string;
     [k: string]: any;
   };
   /**
@@ -72,8 +71,8 @@ export interface NewRelicSourceConfig {
    * The numeric app ID associated with the environment you want data from
    */
   appId: number;
-    /**
-     * The names of New Relic metrics being queried.
-     */
-  names?: Array<string>;
+  /**
+   * Metric names from New Relic API
+   */
+  names?: any[];
 }

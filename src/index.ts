@@ -1,6 +1,6 @@
 
 import {Configuration} from "./config";
-import {Client} from 'elasticsearch'
+import {Client} from '@elastic/elasticsearch';
 import factory from './source/factory';
 import * as Promise from 'bluebird'
 import {omit} from 'lodash'
