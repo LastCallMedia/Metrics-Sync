@@ -9,6 +9,7 @@ export default class CircleCiSync implements Source {
     vcsType: string
     owner: string
     repo: string
+    index: string
 
     constructor(config: CircleCiSourceConfig) {
         if(!config.apiKey) {
@@ -27,9 +28,10 @@ export default class CircleCiSync implements Source {
         this.vcsType = config.vcsType
         this.owner = config.owner
         this.repo = config.repo
+        this.index = config.index ? config.index : 'circleci-YYYY-MM-DD'
     }
     getIndex() {
-        return 'circleci-YYYY-MM-DD';
+        return this.index
     }
     getType() {
         return 'circle_build'
