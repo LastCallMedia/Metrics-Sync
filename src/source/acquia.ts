@@ -9,13 +9,14 @@ import {groupBy, defaultsDeep, set} from 'lodash'
 export default class AcquiaSync implements Source {
     client: Client
     environmentId: string
-
+    index: string
     constructor(config: AcquiaSourceConfig) {
         this.client = new Client(config.public_key, config.private_key);
         this.environmentId = config.environmentId;
+        this.index = config.index ? config.index : 'acquia-YYYY-MM-DD'
     }
     getIndex() {
-        return 'acquia-YYYY-MM-DD';
+        return this.index
     }
     getType() {
         return 'acquia_stackmetric'

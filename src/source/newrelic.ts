@@ -8,6 +8,7 @@ export default class NewRelicSync implements Source {
     client: Client
     appId: number
     names: Array<string>
+    index: string
     constructor(config: NewRelicSourceConfig) {
         if(!config.apiKey) {
             throw new Error('Missing apiKey')
@@ -18,9 +19,10 @@ export default class NewRelicSync implements Source {
         this.client = new Client(config.apiKey);
         this.appId = config.appId;
         this.names = config.names ? config.names : ['HttpDispatcher'];
+        this.index = config.index ? config.index : 'newrelic-YYYY-MM-DD'
     }
     getIndex() {
-        return 'newrelic-YYYY-MM-DD';
+        return this.index
     }
     getType() {
         return 'newrelic_metric'

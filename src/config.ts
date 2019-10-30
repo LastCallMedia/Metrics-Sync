@@ -24,6 +24,10 @@ export interface Configuration {
 export interface AcquiaSourceConfig {
   type: "acquia";
   /**
+   * The name of the Elasticsearch index to write to (defaults to `acquia`)
+   */
+  index?: string;
+  /**
    * The public key associated with your Acquia account
    */
   public_key: string;
@@ -41,6 +45,10 @@ export interface AcquiaSourceConfig {
  */
 export interface CircleCiSourceConfig {
   type: "circleci";
+  /**
+   * The name of the index to write to (defaults to `circleci`)
+   */
+  index?: string;
   /**
    * The API key associated with your CircleCI account
    */
@@ -63,6 +71,10 @@ export interface CircleCiSourceConfig {
  */
 export interface NewRelicSourceConfig {
   type: "newrelic";
+  /**
+   * The name of the Elasticsearch index to write to (defaults to `newrelic`)
+   */
+  index?: string;
   /**
    * The API key associated with your New Relic account
    */
