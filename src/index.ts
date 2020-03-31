@@ -28,7 +28,7 @@ export default async function(config: Configuration) {
                 }
                 return records.concat([
                     {index: {
-                        _id: point._id, _index: indexName(point)}
+                        _id: point._id, _index: indexName(point), _type: source.getType()}
                     },
                     omit(point, '_id')
                 ])
