@@ -1,7 +1,7 @@
 Metrics Sync
 ============
 
-This tool is designed to consume aggregate metrics from several different cloud providers into a single Elasticsearch instance for graphing and measurement.
+Metrics Sync is brought to you by your friends at [Last Call Media](https://www.lastcallmedia.com), this tool is designed to consume aggregate metrics from several different cloud providers into a single Elasticsearch instance for graphing and measurement.
 
 Configuration
 -------------
